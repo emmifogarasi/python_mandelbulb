@@ -2,11 +2,13 @@ import time
 import numpy as np
 import argparse
 from src.mandelbulb_generator import compute_scalar_field
+from src.mandelbulb_visualiser import visualise_mandelbulb
+
 
 def run_mandelbulb_computation():
-    GRID_RESOLUTION = 16
+    GRID_RESOLUTION = 256
     POWER = 8
-    MAX_ITERATIONS = 15
+    MAX_ITERATIONS = 40
     BAILOUT_RADIUS = 2.0
 
     X_BOUNDS = (-1.5, 1.5)
@@ -39,8 +41,29 @@ def run_mandelbulb_computation():
         print(f"Scalar data generated with shape: {scalar_data.shape}")
         print(f"Min escape value in data: {scalar_data.min()}")
         print(f"Max escape value in data: {scalar_data.max()}")
+
+        # VISUALISATION
+        #isosurface_threshold = MAX_ITERATIONS - 0.5
+        plot_bounds = (X_BOUNDS[0], X_BOUNDS[1],
+                       Y_BOUNDS[0], Y_BOUNDS[1],
+                       Z_BOUNDS[0], Z_BOUNDS[1])
+        
+        visualise_mandelbulb(
+            scalar_field=scalar_data,
+            bounds=plot_bounds,
+            isosurface_threshold=None,
+            volume_cmap="magma"
+        )
+
+        #visualise_pyvista_isosurface(
+        #    scalar_field=scalar_data,
+        #   threshold_value=isosurface_threshold,
+        #    bounds=plot_bounds
+        #)
     else:
         print("Error: Scalar data computation failed.")
+
+
 
 if __name__ == "__main__":
     run_mandelbulb_computation()
