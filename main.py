@@ -8,7 +8,7 @@ from src.mandelbulb_visualiser import visualise_mandelbulb
 def run_mandelbulb_computation():
     GRID_RESOLUTION = 256
     POWER = 8
-    MAX_ITERATIONS = 40
+    MAX_ITERATIONS = 60
     BAILOUT_RADIUS = 2.0
 
     X_BOUNDS = (-1.5, 1.5)
@@ -36,30 +36,20 @@ def run_mandelbulb_computation():
     end_time = time.time()
     computation_time = end_time - start_time
     print(f"Computation finished in {computation_time:.2f} seconds.")
-
+    
     if scalar_data is not None:
-        print(f"Scalar data generated with shape: {scalar_data.shape}")
-        print(f"Min escape value in data: {scalar_data.min()}")
-        print(f"Max escape value in data: {scalar_data.max()}")
-
-        # VISUALISATION
-        #isosurface_threshold = MAX_ITERATIONS - 0.5
-        plot_bounds = (X_BOUNDS[0], X_BOUNDS[1],
-                       Y_BOUNDS[0], Y_BOUNDS[1],
-                       Z_BOUNDS[0], Z_BOUNDS[1])
-        
+        plot_bounds = (
+            X_BOUNDS[0], X_BOUNDS[1],
+            Y_BOUNDS[0], Y_BOUNDS[1],
+            Z_BOUNDS[0], Z_BOUNDS[1]
+        )
+        # Pick a threshold—e.g. 30 if max_iterations=40
+        threshold = MAX_ITERATIONS * 0.75  
         visualise_mandelbulb(
             scalar_field=scalar_data,
             bounds=plot_bounds,
-            isosurface_threshold=None,
-            volume_cmap="magma"
+            isosurface_threshold=threshold
         )
-
-        #visualise_pyvista_isosurface(
-        #    scalar_field=scalar_data,
-        #   threshold_value=isosurface_threshold,
-        #    bounds=plot_bounds
-        #)
     else:
         print("Error: Scalar data computation failed.")
 
